@@ -19,24 +19,6 @@ module SweetActions
       raise "@resource must be set for #{self.class.name} since it includes RestConcerns"
     end
 
-    def authorize?
-      true
-    end
-
-    def authorize
-      return unless authorize?
-      return true if authorized?
-      unauthorized
-    end
-
-    def authorized?
-      raise "authorized? method must be implemented in #{self.class.name} class"
-    end
-
-    def unauthorized
-      raise Exceptions::NotAuthorized
-    end
-
     def resource_class
       resource_name.constantize
     end

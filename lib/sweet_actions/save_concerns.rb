@@ -1,5 +1,7 @@
 module SweetActions
   module SaveConcerns
+    include AuthorizationConcerns
+
     def action
       @resource = set_resource
       authorize

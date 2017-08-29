@@ -1,11 +1,13 @@
 module SweetActions
   class DestroyAction < ApiAction
     include RestConcerns
+    include AuthorizationConcerns
 
     private
 
     def action
       @resource = set_resource
+      authorize
       destroy
       serialize
     end

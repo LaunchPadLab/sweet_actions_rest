@@ -1,6 +1,7 @@
 module SweetActions
   module ReadConcerns
     include RestConcerns
+    include AuthorizationConcerns
 
     private
 

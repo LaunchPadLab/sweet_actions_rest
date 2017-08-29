@@ -6,10 +6,10 @@ In a RESTful context, controller actions tend to have more in common with the sa
 
 Which do you think has more in common in terms of programming logic?
 
-(a) events#create <=> events#index
-(b) events#create <=> articles#create
+1. events#create <=> events#index
+2. events#create <=> articles#create
 
-We would argue that (b) has more in common than (a). Both events#create and articles#create need to do the following:
+We would argue that #2 has more in common than #1. Both events#create and articles#create need to do the following:
 
 1. Authorize the transaction
 2. Validate the data
@@ -23,7 +23,7 @@ class EventsController < ApplicationController
   # more similar to articles#create than events#index
   def create
     event = Event.new(event_params)
-    authorize(:create, event)
+    raise NotAuthorized unless can?(:create, event)
 
     if event.save
       UserMailer.new_event_confirmation(event).deliver_later
@@ -41,10 +41,10 @@ class EventsController < ApplicationController
 end
 
 class ArticlesController < ApplicationController
-	# more similar to events#create than articles#index
+  # more similar to events#create than articles#index
   def create
     article = Article.new(article_params)
-    authorize(:create, article)
+    raise NotAuthorized unless can?(:create, article)
 
     if article.save
       serialize(article)
@@ -53,7 +53,7 @@ class ArticlesController < ApplicationController
     end
   end
 
-	# more similar to events#index than articles#create
+  # more similar to events#index than articles#create
   def index
     articles = Article.where(published: true)
     serialize(articles)
@@ -63,7 +63,7 @@ end
 
 Instead, we propose a strategy that looks more like the following:
 
-```
+```ruby
 # app logic for create
 class CreateAction < SweetActions::CreateAction
   def authorized?
@@ -81,9 +81,14 @@ module Events
 end
 ```
 
-As you can see, we can abstract most of the `create` logic into a parent class `SweetActions::CreateAction`.
+With this structure, we essentially have three levels of abstraction:
 
-Often, it won't be necessary to write any code when default behavior for the action suffices. **Only write the code that is unique about this create action vs. other create actions**
+- Basic create logic: SweetActions::CreateActions
+- App create logic: CreateAction
+- Resource create logic: Events::Create
+
+
+As you can see, we can abstract most of the `create` logic to be shared across resources, which means you **only need to write the code that is unique about this create action vs. other create actions**.
 
 ## Default REST Actions
 
@@ -100,9 +105,9 @@ Many of these actions have shared behavior, which we abstract for you:
 - Create and Update rely on decanted params
 - All require authorization (cancancan)
 
-## Example
+## Automatic REST API
 
-Given an Event model, one can do the following and get a basic RESTful API:
+Given an Event model, one can do the following and get a basic RESTful API (assuming we have [decanter](https://github.com/launchpadlab/decanter) and [AMS](https://github.com/rails-api/active_model_serializers):
 
 - rails g model Event name:string start_date:date
 - rails g decanter Event name:string start_date:date
