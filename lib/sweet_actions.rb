@@ -1,16 +1,21 @@
 module SweetActions
-  def configuration
-    @config ||= Decanter::Configuration.new
+  class << self
+    def configuration
+      @config ||= SweetActions::Configuration.new
+    end
+
+    def config
+      yield configuration
+    end
   end
 
-  def config
-    yield configuration
-  end
+  ActiveSupport.run_load_hooks(:sweet_actions, self)
 end
 
 # overhead
 require 'sweet_actions/version'
 require 'sweet_actions/configuration'
+require 'sweet_actions/exceptions'
 
 # base classes
 require 'sweet_actions/action_factory'
@@ -30,13 +35,8 @@ require 'sweet_actions/update_action'
 require 'sweet_actions/show_action'
 require 'sweet_actions/destroy_action'
 
-# default actions
-require 'sweet_actions/defaults/collect'
-require 'sweet_actions/defaults/create'
-require 'sweet_actions/defaults/update'
-require 'sweet_actions/defaults/show'
-require 'sweet_actions/defaults/destroy'
-
 # helpers
 require 'sweet_actions/controller_concerns'
 require 'sweet_actions/routes_helpers'
+
+require 'sweet_actions/railtie' if defined?(::Rails)

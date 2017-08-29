@@ -3,7 +3,7 @@ module SweetActions
     private
 
     def authorize?
-      SweetActions.config.authorize_rest_requests
+      SweetActions.configuration.authorize_rest_requests
     end
 
     def authorize

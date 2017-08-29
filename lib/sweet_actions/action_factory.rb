@@ -39,18 +39,19 @@ module SweetActions
     def default_action
       modules = namespace.split('::')
       class_found = false
-      klass_name = "SweetActions::Defaults::#{action_class_name}"
+      klass_name = nil
 
       until class_found || modules.count == 0
         namespace_to_test = modules.join('::')
-        target = "SweetActions::#{namespace_to_test}::Defaults::#{action_class_name}"
+        target = "#{namespace_to_test}::Defaults::#{action_class_name}"
         if klass_defined?(target)
           klass_name = target
           class_found = true
         end
         modules.pop
       end
-      klass_name.constantize
+      return klass_name.constantize if klass_name.present?
+      "#{action_class_name}Action".constantize
     end
 
     def klass_defined?(klass_name)
