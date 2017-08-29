@@ -7,4 +7,8 @@ class DestroyAction < SweetActions::DestroyAction
     # can?(:destroy, resource)
     false
   end
+
+  def destroy
+    resource.destroy
+  end
 end

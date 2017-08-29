@@ -64,14 +64,31 @@ end
 Instead, we propose a strategy that looks more like the following:
 
 ```ruby
-# app logic for create
+# generic logic for create (sweet_actions gem)
+module SweetActions
+  class CreateAction < ApiAction
+    def action
+      @resource = set_resource
+      authorize
+      validate_and_save ? success : failure
+    end
+
+    # ...
+  end
+end
+
+# app logic for create (app/actions/create_action.rb)
 class CreateAction < SweetActions::CreateAction
+  def set_resource
+    resource_class.new(resource_params)
+  end
+
   def authorized?
     can?(:create, resource)
   end
 end
 
-# resource logic for create
+# resource logic for create (app/actions/events/create.rb)
 module Events
   class Create < CreateAction
     def after_save
@@ -83,7 +100,7 @@ end
 
 With this structure, we essentially have three levels of abstraction:
 
-- Basic create logic: SweetActions::CreateActions
+- Generic create logic: SweetActions::CreateActions
 - App create logic: CreateAction
 - Resource create logic: Events::Create
 
