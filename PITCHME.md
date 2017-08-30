@@ -134,11 +134,8 @@ end
 
 ## Answer: #2
 
-````
+```ruby
 'events#create' == 'articles#create'
-```
-
-```
 'events#create' != 'events#index'
 ```
 
