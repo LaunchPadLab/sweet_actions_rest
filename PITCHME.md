@@ -211,7 +211,6 @@ rails g decanter Event title:name start_date:date
 rails g serializer Event title:name start_date:date
 rails g actions Events
 ```
-```
 
 ---
 
@@ -222,6 +221,3 @@ Rails.application.routes.draw do
   create_sweet_actions(:events)
 end
 ```
-
-```
-bundle
