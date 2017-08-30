@@ -16,13 +16,12 @@ Implementing a REST JSON API should be:
 
 ---
 
-## REST Job to be Done
+## REST JTBD
 
 What is the Job that REST is solving?
 
 - Users need to interact with our database
-- They can do so by either creating a new record or reading, updating, or destroying an existing record
-- CRUD: create, read, update, destroy
+- They can do so by either creating a new record or reading, updating, or destroying an existing record (CRUD)
 
 ---
 
