@@ -57,9 +57,6 @@ class EventsController
 end
 ```
 
-- EventsController is the class (e.g. resource)
-- Each action is just a method (not extendable like a class or shareable like a module)
-
 ---
 
 ## But wait...
