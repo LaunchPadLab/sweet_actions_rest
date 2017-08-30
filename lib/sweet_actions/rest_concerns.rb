@@ -24,7 +24,12 @@ module SweetActions
     end
 
     def resource_decanter
-      @resource_decanter ||= "#{resource_class.to_s.classify}Decanter".constantize
+      decanter_class_name = "#{resource_class.to_s.classify}Decanter"
+      begin
+        decanter_class_name.constantize
+      rescue
+        raise "The following Decanter was not found: #{decanter_class_name} and is required for create and update actions"
+      end
     end
 
     def resource_params
