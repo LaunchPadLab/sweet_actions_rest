@@ -169,4 +169,30 @@ class CreateAction < SweetActions::CreateAction
 end
 ```
 
-___
+---
+
+```ruby
+module Events
+  class Create < CreateAction
+    def after_save
+      UserMailer.send_event_confirmation.deliver_later
+    end
+  end
+end
+```
+
+---
+
+## Demo
+
+1. Install gem
+2. Generate model, decanter, serializer, routes, and actions
+3. Add routes: `create_sweet_actions(:events)`
+
+```
+bundle
+rails g model Event title:name start_date:date
+rails g decanter Event title:name start_date:date
+rails g serializer Event title:name start_date:date
+rails g actions Events
+```
