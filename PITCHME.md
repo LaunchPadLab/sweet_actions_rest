@@ -67,6 +67,10 @@ class EventsController
 end
 ```
 
+---
+
+## Current Process
+
 - resource = class
 - actions = methods
 
