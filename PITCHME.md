@@ -79,7 +79,7 @@ Which do you think has more in common in terms of programming logic?
 1. events#create <=> events#index
 2. events#create <=> articles#create
 
-+++
+---
 
 ```ruby
 class EventsController < ApplicationController
@@ -101,7 +101,7 @@ class EventsController < ApplicationController
 end
 ```
 
-+++
+---
 
 ```ruby
 class ArticlesController < ApplicationController
@@ -138,9 +138,11 @@ end
 
 ---
 
-## Actions as First Class Citizens
+### Actions as First Class Citizens
 
 Since the actions have more in common with each other than they do with the resources to which they belong, it is the actions that should be objects instead of the resource.
+
+---
 
 ```ruby
 class CreateAction < SweetActions::CreateAction
@@ -160,3 +162,5 @@ class CreateAction < SweetActions::CreateAction
   end
 end
 ```
+
+___
