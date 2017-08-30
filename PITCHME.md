@@ -67,18 +67,13 @@ class EventsController
 end
 ```
 
----
-
-## Current Process
-
-- resource = class
-- actions = methods
+**resource = class, actions = methods**
 
 ---
 
 ## But wait...
 
-Which do you think has more in common in terms of programming logic?
+Which do you think has more in common?
 
 1. events#create <=> events#index
 2. events#create <=> articles#create
@@ -86,7 +81,7 @@ Which do you think has more in common in terms of programming logic?
 ---
 
 ```ruby
-class EventsController < ApplicationController
+class EventsController
   def create
     event = Event.new(event_params)
     raise NotAuthorized unless can?(:create, event)
@@ -108,7 +103,20 @@ end
 ---
 
 ```ruby
-class ArticlesController < ApplicationController
+class EventsController
+  def create
+    event = Event.new(event_params)
+    raise NotAuthorized unless can?(:create, event)
+
+    if event.save
+      # success
+    else
+      # failure
+    end
+  end
+end
+
+class ArticlesController
   def create
     article = Article.new(article_params)
     raise NotAuthorized unless can?(:create, article)
@@ -118,12 +126,6 @@ class ArticlesController < ApplicationController
     else
       # failure
     end
-  end
-
-  # more similar to events#index than articles#create
-  def index
-    articles = Article.where(published: true)
-    serialize(articles)
   end
 end
 ```
