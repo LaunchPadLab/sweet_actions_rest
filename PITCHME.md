@@ -188,19 +188,23 @@ end
 
 ---
 
-1. Install Gem
+## 1. Install Gem
+
+Gemfile:
 
 ```ruby
 gem 'sweet_actions'
 ```
 
+Terminal:
+
 ```
-install
+bundle
 ```
 
 ---
 
-2. Generate Resource
+## 2. Generate Resource
 
 ```
 rails g model Event title:name start_date:date
@@ -211,7 +215,7 @@ rails g actions Events
 
 ---
 
-3. Add Routes
+## 3. Add Routes
 
 ```ruby
 Rails.application.routes.draw do
