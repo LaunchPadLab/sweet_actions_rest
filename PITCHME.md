@@ -41,6 +41,8 @@ Concise, consistent requirements.
 
 This should be easy for us programmers.
 
+---
+
 ## Current Process
 
 We are focused on the **resource** instead of the **action**
