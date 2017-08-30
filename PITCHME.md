@@ -186,13 +186,42 @@ end
 ## Demo
 
 1. Install gem
-2. Generate model, decanter, serializer, routes, and actions
-3. Add routes: `create_sweet_actions(:events)`
+2. Generate resource (model, decanter, serializer, actions)
+3. Add routes
+
+---
+
+1. Install Gem
+
+```ruby
+gem 'sweet_actions'
+```
 
 ```
-bundle
+install
+```
+
+---
+
+2. Generate Resource
+
+```
 rails g model Event title:name start_date:date
 rails g decanter Event title:name start_date:date
 rails g serializer Event title:name start_date:date
 rails g actions Events
 ```
+```
+
+---
+
+3. Add Routes
+
+```ruby
+Rails.application.routes.draw do
+  create_sweet_actions(:events)
+end
+```
+
+```
+bundle
