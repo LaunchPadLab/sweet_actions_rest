@@ -243,10 +243,14 @@ end
 
 ## Installation
 
+### 1. Install Gem
+
 Gemfile:
 
-```
+```ruby
 gem 'sweet_actions'
+gem 'active_model_serializers'
+gem 'decanter'
 ```
 
 Terminal:
@@ -254,4 +258,22 @@ Terminal:
 ```
 bundle
 bundle exec rails g sweet_actions:install
+```
+
+### 2. Generate Resource
+
+```
+rails g model Event title:name start_date:date
+bundle exec rake db:migrate
+rails g decanter Event title:name start_date:date
+rails g serializer Event title:name start_date:date
+rails g actions Events
+```
+
+### 3. Add Routes
+
+```ruby
+Rails.application.routes.draw do
+  create_sweet_actions(:events)
+end
 ```

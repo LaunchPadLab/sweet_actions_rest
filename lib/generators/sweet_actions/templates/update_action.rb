@@ -7,4 +7,9 @@ class UpdateAction < SweetActions::UpdateAction
     # can?(:update, resource)
     false
   end
+
+  def save
+    resource.attributes = resource_params
+    resource.save
+  end
 end

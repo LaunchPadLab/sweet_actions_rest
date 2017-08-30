@@ -186,6 +186,7 @@ end
 2. Generate resource (model, decanter, serializer, actions)
 3. Add routes
 
+Note: you may want to disable protect_from_forgery
 ---
 
 ## 1. Install Gem
@@ -200,6 +201,7 @@ Terminal:
 
 ```
 bundle
+bundle exec rails g sweet_actions:install
 ```
 
 ---
@@ -207,9 +209,10 @@ bundle
 ## 2. Generate Resource
 
 ```
-rails g model Event title:name start_date:date
-rails g decanter Event title:name start_date:date
-rails g serializer Event title:name start_date:date
+rails g model Event name:string start_date:date
+bundle exec rake db:migrate
+rails g decanter Event name:string start_date:date
+rails g serializer Event name:string start_date:date
 rails g actions Events
 ```
 
