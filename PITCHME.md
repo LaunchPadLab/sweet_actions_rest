@@ -24,7 +24,7 @@ What is the Job that REST is solving?
 - They can do so by either creating a new record or reading, updating, or destroying an existing record
 - CRUD: create, read, update, destroy
 
-+++
+---
 
 For example, given an Events resource:
 
@@ -34,7 +34,7 @@ For example, given an Events resource:
 - Update an event
 - Delete an event
 
-+++
+---
 
 ## Good News
 
@@ -72,36 +72,36 @@ Which do you think has more in common in terms of programming logic?
 
 ```ruby
 class EventsController < ApplicationController
-  # more similar to articles#create than events#index
   def create
     event = Event.new(event_params)
     raise NotAuthorized unless can?(:create, event)
 
     if event.save
-      UserMailer.new_event_confirmation(event).deliver_later
-      serialize(event)
+      # success
     else
-      serialize_errors(event)
+      # failure
     end
   end
 
-  # more similar to articles#index than events#create
   def index
     events = Event.where(date: >= Date.today)
     serialize(events)
   end
 end
+```
 
++++
+
+```ruby
 class ArticlesController < ApplicationController
-  # more similar to events#create than articles#index
   def create
     article = Article.new(article_params)
     raise NotAuthorized unless can?(:create, article)
 
     if article.save
-      serialize(article)
+      # success
     else
-      serialize_errors(article)
+      # failure
     end
   end
 
@@ -109,6 +109,43 @@ class ArticlesController < ApplicationController
   def index
     articles = Article.where(published: true)
     serialize(articles)
+  end
+end
+```
+
+---
+
+## Answer: #2
+
+````
+'events#create' == 'articles#create'
+```
+
+```
+'events#create' != 'events#index'
+```
+
+---
+
+## Actions as First Class Citizens
+
+Since the actions have more in common with each other than they do with the resources to which they belong, it is the actions that should be objects instead of the resource.
+
+```ruby
+class CreateAction < SweetActions::CreateAction
+  def action
+    resource = set_resource
+    resource.save ? success : failure
+  end
+
+  private
+
+  def set_resource
+    resource_class.new(resource_params)
+  end
+
+  def resource_params
+    decanter.new(params[resource_name])
   end
 end
 ```
