@@ -16,7 +16,7 @@ Implementing a REST JSON API should be:
 
 ---
 
-## REST JTBD
+## Job to be Done
 
 What is the Job that REST is solving?
 
@@ -25,21 +25,31 @@ What is the Job that REST is solving?
 
 ---
 
-For example, given an Events resource:
+For example, given an **Events** resource:
 
+- See an event
 - See a list of events
-- See details about an event
 - Create an event
 - Update an event
 - Delete an event
 
 ---
 
+## The Big 5
+
+- show
+- index
+- create
+- update
+- destroy
+
+---
+
 ## Good News
 
-Concise, consistent requirements.
+Consistency = easy to program
 
-This should be easy for us programmers.
+...or at least it should be
 
 ---
 
@@ -56,6 +66,9 @@ class EventsController
   def destroy; end
 end
 ```
+
+- resource = class
+- actions = methods
 
 ---
 
