@@ -10,12 +10,12 @@ module SweetActions
       end
 
       def set_resource
-        raise "set_resource method must be implemented in #{self.class.name} class since it includes RESTConcerns"
+        raise "set_resource method must be implemented in #{self.class.name} class since it includes SweetActions::REST::Resource"
       end
 
       def resource
         return @resource if defined?("@resource")
-        raise "@resource must be set for #{self.class.name} since it includes RESTConcerns"
+        raise "@resource must be set for #{self.class.name} since it includes SweetActions::REST::Resource"
       end
 
       def resource_class

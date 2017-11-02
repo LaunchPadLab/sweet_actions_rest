@@ -1,8 +1,8 @@
 module SweetActions
   module REST
     module Update
-      include Find
       include Save
+      include Find
 
       private
 

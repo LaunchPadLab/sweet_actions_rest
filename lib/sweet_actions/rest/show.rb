@@ -1,8 +1,8 @@
 module SweetActions
   module REST
     module Show
-      include Find
       include Read
+      include Find
     end
   end
 end

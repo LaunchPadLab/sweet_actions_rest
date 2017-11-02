@@ -38,7 +38,7 @@ module SweetActions
       end
 
       def serialized_attributes
-        return resource unless serialized_resource
+        return resource.as_json unless serialized_resource
         serialized_resource.serializer_instance
       end
 
