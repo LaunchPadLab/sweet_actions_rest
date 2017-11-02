@@ -1,4 +1,4 @@
-class UpdateAction < SweetActions::UpdateAction
+class UpdateAction < SweetActions::JSON::UpdateAction
   def set_resource
     resource_class.find(params[:id])
   end

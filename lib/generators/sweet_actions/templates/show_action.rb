@@ -1,4 +1,4 @@
-class ShowAction < SweetActions::ShowAction
+class ShowAction < SweetActions::JSON::ShowAction
   def set_resource
     resource_class.find(params[:id])
   end

@@ -1,4 +1,4 @@
-class CollectAction < SweetActions::CollectAction
+class CollectAction < SweetActions::JSON::CollectAction
   def set_resource
     resource_class.all
   end

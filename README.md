@@ -16,7 +16,7 @@ We would argue that #2 has more in common than #1. Both events#create and articl
 3. Persist the new record
 4. Respond with new record (if successful) or error information (if unsuccessful) in the JSON
 
-By organizing our actions as methods inside a resource based controller like below, we don't have the opportunity to take advantage of basic Object Oriented programming concepts like Inheritance and Modules.
+Rails pushes us to organize our actions as methods inside a resource based controller like below. With this approach we cannot take advantage of basic Object Oriented programming concepts like Inheritance and Modules as it relates to specific actions.
 
 ```ruby
 class EventsController < ApplicationController
@@ -61,9 +61,50 @@ class ArticlesController < ApplicationController
 end
 ```
 
-Instead, we propose a strategy that looks more like the following:
+Instead, we propose a strategy where the actions themselves are classes. This would allow us have multiple layers of abstraction like so:
+
+1. **Generic Logic** (logic that applies to all apps that use SweetActions):
+- `class SweetActions::CreateAction`
+
+2. **Application Logic**: logic that applies to all create actions in your app:
+- `class CreatAction < SweetActions::CreateAction`
+
+3. **Resource Logic**: logic that applies to a specific resource (e.g. Events) in your app
+- `class Events::Create < CreateAction`
+
+With this approach, we often won't even need to implement resource specific actions. This is because by default our `Events::Create` action will inherit all the functionality it needs. Only when there are deviances from the norm do we implement resource specific classes and in those cases, we need only override the methods that correspond with the deviance.
+
+For example, let's say we want to send an email when an event is created. It's as easy as overriding the `after_save` hook:
 
 ```ruby
+# resource logic for create (app/actions/events/create.rb)
+module Events
+  class Create < CreateAction
+    def after_save
+      UserMailer.new_event_confirmation(resource).deliver_later
+    end
+  end
+end
+```
+
+If we wanted to override all action behavior, we could just implement the `action` method itself:
+module Events
+  class Create < CreateAction
+    def action
+      event = Event.new(resource_params)
+      event.save ? success(event) : failure
+    end
+
+    def success(event)
+      UserMailer.new_event_confirmation(resource).deliver_later
+      { success: true, data: { event: event } }
+    end
+  end
+end
+```
+
+Under the hood, this is made possible by a structure that looks like the following:
+
 # generic logic for create (sweet_actions gem)
 module SweetActions
   class CreateAction < ApiAction
@@ -97,13 +138,6 @@ module Events
   end
 end
 ```
-
-With this structure, we essentially have three levels of abstraction:
-
-- Generic create logic: SweetActions::CreateActions
-- App create logic: CreateAction
-- Resource create logic: Events::Create
-
 
 As you can see, we can abstract most of the `create` logic to be shared across resources, which means you **only need to write the code that is unique about this create action vs. other create actions**.
 
