@@ -1,10 +1,10 @@
 module SweetActions
-  module Rest
+  module REST
     module Serialize
       private
 
       def root_key
-        raise "root_key method must be implemented in #{self.class.name} since it includes SweetActions::Rest::Serialize"
+        raise "root_key method must be implemented in #{self.class.name} since it includes SweetActions::REST::Serialize"
       end
 
       def serialize

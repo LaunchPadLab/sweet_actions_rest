@@ -1,5 +1,5 @@
 module SweetActions
-  module Rest
+  module REST
     module Destroy
       include Base
       include Find
@@ -18,7 +18,7 @@ module SweetActions
       end
 
       def respond
-        raise "respond method must be implemented by #{self.class.name} since it includes SweetActions::Rest::Read"
+        raise "respond method must be implemented by #{self.class.name} since it includes SweetActions::REST::Read"
       end
     end
   end

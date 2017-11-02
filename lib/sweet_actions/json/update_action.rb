@@ -1,8 +1,8 @@
 module SweetActions
   module JSON
     class UpdateAction < BaseAction
-      include Rest::Serialize
-      include Rest::Update
+      include REST::Serialize
+      include REST::Update
 
       private
 

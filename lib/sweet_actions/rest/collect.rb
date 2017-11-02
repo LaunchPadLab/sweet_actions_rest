@@ -1,5 +1,5 @@
 module SweetActions
-  module Rest
+  module REST
     module Collect
       include Read
       include Multiple

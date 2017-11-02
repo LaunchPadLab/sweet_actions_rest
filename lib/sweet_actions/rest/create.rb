@@ -1,5 +1,5 @@
 module SweetActions
-  module Rest
+  module REST
     module Create
       include Save
       include Singular

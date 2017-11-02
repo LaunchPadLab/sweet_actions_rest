@@ -1,8 +1,8 @@
 module SweetActions
-  module Rest
+  module REST
     module Base
       include AuthorizationConcerns
-      include Rest::Resource
+      include REST::Resource
     end
   end
 end

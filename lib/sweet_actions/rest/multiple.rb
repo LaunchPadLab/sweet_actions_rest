@@ -1,5 +1,5 @@
 module SweetActions
-  module Rest
+  module REST
     module Multiple
       def root_key
         plural_key

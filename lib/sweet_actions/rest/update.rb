@@ -1,5 +1,5 @@
 module SweetActions
-  module Rest
+  module REST
     module Update
       include Find
       include Save

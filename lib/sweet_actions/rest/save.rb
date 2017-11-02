@@ -1,5 +1,5 @@
 module SweetActions
-  module Rest
+  module REST
     module Save
       include Base
 
@@ -22,7 +22,7 @@ module SweetActions
       end
 
       def respond_with_success
-        raise "respond_with_success method must be implemented by #{self.class.name} since it includes SweetActions::Rest::SaveConcerns"
+        raise "respond_with_success method must be implemented by #{self.class.name} since it includes SweetActions::REST::SaveConcerns"
       end
 
       def respond_with_error

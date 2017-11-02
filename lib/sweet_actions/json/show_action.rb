@@ -1,8 +1,8 @@
 module SweetActions
   module JSON
     class ShowAction < BaseAction
-      include Rest::Serialize
-      include Rest::Show
+      include REST::Serialize
+      include REST::Show
 
       private
 
