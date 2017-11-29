@@ -178,6 +178,7 @@ end
 
 Under the hood, this is made possible by a structure that looks like the following:
 
+```ruby
 # generic logic for create (sweet_actions gem)
 module SweetActions
   module JSON
@@ -192,7 +193,9 @@ module SweetActions
     end
   end
 end
+```
 
+```ruby
 # app logic for create (app/actions/create_action.rb)
 class CreateAction < SweetActions::JSON::CreateAction
   def set_resource
@@ -203,7 +206,9 @@ class CreateAction < SweetActions::JSON::CreateAction
     can?(:create, resource)
   end
 end
+```
 
+```ruby
 # resource logic for create (app/actions/events/create.rb)
 module Events
   class Create < CreateAction
