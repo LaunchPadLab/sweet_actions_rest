@@ -135,10 +135,10 @@ end
 Instead, we propose a strategy where the actions themselves are classes. This would allow us have multiple layers of abstraction like so:
 
 1. **Generic Logic** (logic that applies to all apps that use SweetActions):
-- `class SweetActions::CreateAction`
+- `class SweetActions::JSON::CreateAction`
 
 2. **Application Logic**: logic that applies to all create actions in your app:
-- `class CreatAction < SweetActions::CreateAction`
+- `class CreateAction < SweetActions::JSON::CreateAction`
 
 3. **Resource Logic**: logic that applies to a specific resource (e.g. Events) in your app
 - `class Events::Create < CreateAction`
@@ -159,6 +159,8 @@ end
 ```
 
 If we wanted to override all action behavior, we could just implement the `action` method itself:
+
+```ruby
 module Events
   class Create < CreateAction
     def action
