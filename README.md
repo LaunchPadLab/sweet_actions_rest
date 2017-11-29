@@ -1,5 +1,76 @@
 # Sweet Actions
 
+## Installation
+
+### 1. Install Gem
+
+Gemfile:
+
+```ruby
+gem 'sweet_actions'
+gem 'active_model_serializers'
+gem 'decanter'
+```
+
+Terminal:
+
+```
+bundle
+bundle exec rails g sweet_actions:install
+```
+
+### 2. Generate Resource
+
+```
+rails g model Event title:string start_date:date
+bundle exec rake db:migrate
+rails g decanter Event title:string start_date:date
+rails g serializer Event title:string start_date:date
+rails g actions Events
+```
+
+### 3. Add Routes
+
+```ruby
+Rails.application.routes.draw do
+  scope :api
+    scope :v1
+      create_sweet_actions(:events)
+    end
+  end
+end
+```
+
+### Profit
+
+```
+rails s
+```
+
+Using Postman, submit the following request:
+
+POST to localhost:3000/api/v1/events
+
+```
+{
+  "event": {
+    "title": "My sweet event",
+    "start_date": "01/18/2018"
+  }
+}
+```
+
+You should get a response like so:
+
+{
+  "type": "event",
+  "attributes": {
+    "id": 1,
+    "title": "My sweet event",
+    "start_date": "2018-01-18"
+  }
+}
+
 ## The Idea
 
 In a RESTful context, controller actions tend to have more in common with the same actions belonging to other resources than other actions belonging to the same resource. For example, let's say we have two resources in our app: Events and Articles.
@@ -107,19 +178,21 @@ Under the hood, this is made possible by a structure that looks like the followi
 
 # generic logic for create (sweet_actions gem)
 module SweetActions
-  class CreateAction < ApiAction
-    def action
-      @resource = set_resource
-      authorize
-      validate_and_save ? success : failure
-    end
+  module JSON
+    class CreateAction < BaseAction
+      def action
+        @resource = set_resource
+        authorize
+        validate_and_save ? success : failure
+      end
 
-    # ...
+      # ...
+    end
   end
 end
 
 # app logic for create (app/actions/create_action.rb)
-class CreateAction < SweetActions::CreateAction
+class CreateAction < SweetActions::JSON::CreateAction
   def set_resource
     resource_class.new(resource_params)
   end
@@ -275,52 +348,17 @@ module Events
 end
 ```
 
-## Installation
-
-### 1. Install Gem
-
-Gemfile:
-
-```ruby
-gem 'sweet_actions'
-gem 'active_model_serializers'
-gem 'decanter'
-```
-
-Terminal:
-
-```
-bundle
-bundle exec rails g sweet_actions:install
-```
-
-### 2. Generate Resource
-
-```
-rails g model Event title:string start_date:date
-bundle exec rake db:migrate
-rails g decanter Event title:string start_date:date
-rails g serializer Event title:string start_date:date
-rails g actions Events
-```
-
-### 3. Add Routes
-
-```ruby
-Rails.application.routes.draw do
-  create_sweet_actions(:events)
-end
-```
-
 ## Creating One-Off Actions
 
-Create a new file at app/actions/events/trigger_export.rb:
+Create a new file at app/actions/events/export.rb:
 
 ```ruby
 module Events
-  class TriggerExport < SweetActions::JSON::BaseAction
+  class Export < SweetActions::JSON::BaseAction
     def action
-      # trigger export logic here
+      {
+        success: true
+      }
     end
   end
 end
@@ -330,6 +368,20 @@ Create the route:
 
 ```ruby
 Rails.application.routes.draw do
-  get '/events/trigger_action' => 'events#trigger_action', resource_class: 'Event'
+  scope :api
+    scope :v1
+      get '/events/export' => 'sweet_actions#export', resource_class: 'Event'
+    end
+  end
 end
 ```
+
+Using Postman, submit the following request:
+
+GET to localhost:3000/api/v1/events/export
+
+You should get a response like so:
+
+{
+  success: true
+}
