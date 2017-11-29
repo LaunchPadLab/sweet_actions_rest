@@ -1,7 +1,6 @@
 module SweetActions
   module JSON
     class DestroyAction < BaseAction
-      include REST::Serialize
       include REST::Destroy
 
       private

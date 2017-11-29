@@ -1,7 +1,6 @@
 module SweetActions
   module JSON
     class CollectAction < BaseAction
-      include REST::Serialize
       include REST::Collect
 
       private

@@ -297,10 +297,10 @@ bundle exec rails g sweet_actions:install
 ### 2. Generate Resource
 
 ```
-rails g model Event title:name start_date:date
+rails g model Event title:string start_date:date
 bundle exec rake db:migrate
-rails g decanter Event title:name start_date:date
-rails g serializer Event title:name start_date:date
+rails g decanter Event title:string start_date:date
+rails g serializer Event title:string start_date:date
 rails g actions Events
 ```
 
@@ -309,5 +309,27 @@ rails g actions Events
 ```ruby
 Rails.application.routes.draw do
   create_sweet_actions(:events)
+end
+```
+
+## Creating One-Off Actions
+
+Create a new file at app/actions/events/trigger_export.rb:
+
+```ruby
+module Events
+  class TriggerExport < SweetActions::JSON::BaseAction
+    def action
+      # trigger export logic here
+    end
+  end
+end
+```
+
+Create the route:
+
+```ruby
+Rails.application.routes.draw do
+  get '/events/trigger_action' => 'events#trigger_action', resource_class: 'Event'
 end
 ```

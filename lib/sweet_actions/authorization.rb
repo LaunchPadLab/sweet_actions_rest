@@ -1,5 +1,5 @@
 module SweetActions
-  module AuthorizationConcerns
+  module Authorization
     private
 
     def authorize?

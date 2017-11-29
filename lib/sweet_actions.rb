@@ -24,15 +24,15 @@ require 'sweet_actions/action_factory'
 require 'sweet_actions/action'
 
 # concerns
-require 'sweet_actions/authorization_concerns'
+require 'sweet_actions/authorization'
+require 'sweet_actions/resource'
+require 'sweet_actions/serialize'
 
 # rest
-require 'sweet_actions/rest/resource'
 require 'sweet_actions/rest/base'
 require 'sweet_actions/rest/singular'
 require 'sweet_actions/rest/multiple'
 require 'sweet_actions/rest/find'
-require 'sweet_actions/rest/serialize'
 require 'sweet_actions/rest/save'
 require 'sweet_actions/rest/read'
 require 'sweet_actions/rest/collect'

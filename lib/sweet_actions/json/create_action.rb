@@ -1,7 +1,6 @@
 module SweetActions
   module JSON
     class CreateAction < BaseAction
-      include REST::Serialize
       include REST::Create
 
       private
