@@ -1,5 +1,14 @@
 # Sweet Actions
 
+## Introduction
+Controller actions (`events#create`) tend to have more in common with their cousins (`articles#create`) than their siblings (`events#show`). Because of this, we think actions should be classes instead of methods. This makes it easier to use common Object Oriented principles like Inheritance and Composition.
+
+The end result of this approach is that resource-specific controllers and actions often don't even need to exist - their logic is abstracted to parent actions.
+
+Work smart not hard right?
+
+Let's take a look at how that's possible.
+
 ## Installation
 
 ### 1. Install Gem
@@ -41,7 +50,7 @@ Rails.application.routes.draw do
 end
 ```
 
-### Profit
+### 4. Profit
 
 ```
 rails s
@@ -51,7 +60,7 @@ Using Postman, submit the following request:
 
 POST to localhost:3000/api/v1/events
 
-```
+```json
 {
   "event": {
     "title": "My sweet event",
@@ -62,6 +71,7 @@ POST to localhost:3000/api/v1/events
 
 You should get a response like so:
 
+```json
 {
   "type": "event",
   "attributes": {
@@ -70,8 +80,73 @@ You should get a response like so:
     "start_date": "2018-01-18"
   }
 }
+```
 
-## The Idea
+## Default REST Actions
+
+For a given resource, we provide five RESTful actions:
+
+```
+Collect: GET '/events'
+Create: POST '/events'
+Show: GET '/events/:id'
+Update: PUT '/events/:id'
+Destroy: DELETE '/events/:id'
+```
+
+Many of these actions have shared behavior, which we abstract for you:
+- Authorization of resource (cancancan for example)
+- Create and Update need to be able to properly respond with error information when save does not succeed
+- Create and Update rely on decanted params
+- Serialization of resource
+
+## Creating One-Off Actions
+
+For actions that are not RESTful (i.e. not one of the five listed above), you can still use `sweet_actions`. For example, let's say you want to create the action `events#export`.
+
+1. Create a new file at app/actions/events/export.rb:
+2. Implement `action` method that responds with a response hash
+3. Create the route
+
+```ruby
+# app/actions/events/export.rb:
+module Events
+  class Export < SweetActions::JSON::BaseAction
+    def action
+      {
+        success: true
+      }
+    end
+  end
+end
+```
+
+```ruby
+# config/routes.rb
+Rails.application.routes.draw do
+  scope :api
+    scope :v1
+      get '/events/export' => 'sweet_actions#export', resource_class: 'Event'
+    end
+  end
+end
+```
+
+Using a tool like Postman, submit the following request:
+
+```
+GET to localhost:3000/api/v1/events/export
+```
+
+You should get a response like so:
+
+```json
+{
+  success: true
+}
+```
+
+## The Idea Explained in Detail
 
 In a RESTful context, controller actions tend to have more in common with the same actions belonging to other resources than other actions belonging to the same resource. For example, let's say we have two resources in our app: Events and Articles.
 
@@ -221,174 +296,3 @@ end
 
 As you can see, we can abstract most of the `create` logic to be shared across resources, which means you **only need to write the code that is unique about this create action vs. other create actions**.
 
-## Default REST Actions
-
-For a given resource...
-- Collect: list items
-- Create: create new item
-- Show: show item
-- Update: update item
-- Destroy: delete item
-
-Many of these actions have shared behavior, which we abstract for you:
-- All require serialization of the resource
-- Create and Update need to be able to properly respond with error information when save does not succeed
-- Create and Update rely on decanted params
-- All require authorization (cancancan)
-
-## Automatic REST API
-
-Given an Event model, one can do the following and get a basic RESTful API (assuming we have [decanter](https://github.com/launchpadlab/decanter) and [AMS](https://github.com/rails-api/active_model_serializers):
-
-- rails g model Event name:string start_date:date
-- rails g decanter Event name:string start_date:date
-- rails g serializer Event name:string start_date:date
-- add the new resource in routes
-
-With that, you have the following at your disposal:
-
-Collect: get '/events'
-Create: post '/events'
-Show: get '/events/:id'
-Update: put '/events/:id'
-Destroy: delete '/events/:id'
-
-Each of these will respond with a consistent JSON format, including when saves don't succeed.
-
-## Overriding Default Actions
-
-Should you choose to override the default behavior (defined in app/sweet_actions/defaults/, ), you need only create your own action like so:
-
-app/sweet_actions/events/collect.rb
-
-```
-module Events
-  class Collect < SweetActions::CollectAction
-    def set_resource
-      Event.all.limit(10)
-    end
-
-    def authorized?
-      can?(:read, resource)
-    end
-  end
-end
-```
-
-app/sweet_actions/events/create.rb
-
-```
-module Events
-  class Create < CreateAction
-    def set_resource
-      Event.new(resource_params)
-    end
-
-    def authorized?
-      can?(:create, resource)
-    end
-
-    def save
-      resource.save
-    end
-
-    def after_save
-      SiteMailer.notify_user
-    end
-  end
-end
-```
-
-app/sweet_actions/events/show.rb
-
-```
-module Events
-  class Show < ShowAction
-    def set_resource
-      Event.find(params[:id])
-    end
-
-    def authorized?
-      can?(:read, resource)
-    end
-  end
-end
-```
-
-app/sweet_actions/events/update.rb
-
-```
-module Events
-  class Update < UpdateAction
-    def set_resource
-      Event.find(params[:id])
-    end
-
-    def authorized?
-      can?(:update, resource)
-    end
-
-    def save
-      resource.update(resource_params)
-    end
-  end
-end
-```
-
-app/sweet_actions/events/destroy.rb
-
-```
-module Events
-  class Destroy < DestroyAction
-    def set_resource
-      Event.find(params[:id])
-    end
-
-    def authorized?
-      can?(:destroy, resource)
-    end
-
-    def destroy
-      resource.destroy
-    end
-  end
-end
-```
-
-## Creating One-Off Actions
-
-Create a new file at app/actions/events/export.rb:
-
-```ruby
-module Events
-  class Export < SweetActions::JSON::BaseAction
-    def action
-      {
-        success: true
-      }
-    end
-  end
-end
-```
-
-Create the route:
-
-```ruby
-Rails.application.routes.draw do
-  scope :api
-    scope :v1
-      get '/events/export' => 'sweet_actions#export', resource_class: 'Event'
-    end
-  end
-end
-```
-
-Using Postman, submit the following request:
-
-GET to localhost:3000/api/v1/events/export
-
-You should get a response like so:
-
-{
-  success: true
-}
