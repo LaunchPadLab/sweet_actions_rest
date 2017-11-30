@@ -1,7 +1,7 @@
 # Sweet Actions
 
 ## Introduction
-Controller actions (`events#create`) tend to have more in common with their cousins (`articles#create`) than their siblings (`events#show`). Because of this, we think actions should be classes instead of methods. This makes it easier to use common Object Oriented principles like Inheritance and Composition.
+Controller actions (`events#create`) tend to have more in common with their cousins (`articles#create`) than their siblings (`events#show`). Because of this, we think actions should be classes instead of methods. This makes it possible for actions to take advantage of common Object Oriented principles like Inheritance and Composition.
 
 The end result of this approach is that resource-specific controllers and actions often don't even need to exist - their logic is abstracted to parent actions.
 
