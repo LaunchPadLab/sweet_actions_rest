@@ -28,6 +28,17 @@ bundle
 bundle exec rails g sweet_actions:install
 ```
 
+This command generates a folder at `app/actions` with the following structure:
+
+```
+- base_action.rb
+- collect_action.rb
+- create_action.rb
+- destroy_action.rb
+- show_action.rb
+- update_action.rb
+```
+
 ### 2. Generate Resource
 
 ```
@@ -36,6 +47,17 @@ bundle exec rake db:migrate
 rails g decanter Event title:string start_date:date
 rails g serializer Event title:string start_date:date
 rails g actions Events
+```
+
+This last command (`rails g actions events`) generates a folder at `app/actions/events` with the following structure:
+
+```
+- events/
+    - collect.rb
+    - create.rb
+    - destroy.rb
+    - show.rb
+    - update.rb
 ```
 
 ### 3. Add Routes
