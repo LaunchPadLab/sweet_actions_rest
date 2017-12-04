@@ -1,9 +1,13 @@
 module SweetActions
-  module RestSerializerConcerns
+  module Serialize
     private
 
     def root_key
-      raise "root_key method must be implemented in #{self.class.name} since it includes RestSerializerConcerns"
+      raise "root_key method must be implemented in #{self.class.name} since it includes SweetActions::Serialize"
+    end
+
+    def resource
+      raise "resource method must be implemented in #{self.class.name} since it includes SweetActions::Serialize"
     end
 
     def serialize
@@ -27,12 +31,17 @@ module SweetActions
       }
     end
 
+    def map_base_to__error(error_obj)
+      error_obj[:_error] = error_obj.delete(:base) if error_obj.key? :base
+      error_obj
+    end
+
     def errors
       resource.respond_to?(:errors) && resource.errors
     end
 
     def serialized_attributes
-      return resource unless serialized_resource
+      return resource.as_json unless serialized_resource
       serialized_resource.serializer_instance
     end
 

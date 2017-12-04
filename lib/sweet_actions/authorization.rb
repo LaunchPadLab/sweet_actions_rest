@@ -1,5 +1,5 @@
 module SweetActions
-  module AuthorizationConcerns
+  module Authorization
     private
 
     def authorize?
@@ -13,7 +13,7 @@ module SweetActions
     end
 
     def authorized?
-      raise "authorized? method is required for the #{self.class.name} action"
+      false # lock it down by default
     end
 
     def unauthorized

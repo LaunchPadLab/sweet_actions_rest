@@ -1,7 +1,5 @@
 module SweetActions
-  module RestConcerns
-    include RestSerializerConcerns
-
+  module Resource
     attr_reader :resource_name, :resource
 
     private
@@ -11,12 +9,12 @@ module SweetActions
     end
 
     def set_resource
-      raise "set_resource method must be implemented in #{self.class.name} class since it includes RestConcerns"
+      raise "set_resource method must be implemented in #{self.class.name} class since it includes SweetActions::Resource"
     end
 
     def resource
       return @resource if defined?("@resource")
-      raise "@resource must be set for #{self.class.name} since it includes RestConcerns"
+      raise "@resource must be set for #{self.class.name} since it includes SweetActions::Resource"
     end
 
     def resource_class

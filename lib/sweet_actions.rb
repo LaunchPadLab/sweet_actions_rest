@@ -1,3 +1,5 @@
+require 'active_support/all'
+
 module SweetActions
   class << self
     def configuration
@@ -19,21 +21,33 @@ require 'sweet_actions/exceptions'
 
 # base classes
 require 'sweet_actions/action_factory'
-require 'sweet_actions/api_action'
+require 'sweet_actions/action'
 
 # concerns
-require 'sweet_actions/rest_serializer_concerns'
-require 'sweet_actions/rest_concerns'
-require 'sweet_actions/authorization_concerns'
-require 'sweet_actions/save_concerns'
-require 'sweet_actions/read_concerns'
+require 'sweet_actions/authorization'
+require 'sweet_actions/resource'
+require 'sweet_actions/serialize'
 
-# actions
-require 'sweet_actions/collect_action'
-require 'sweet_actions/create_action'
-require 'sweet_actions/update_action'
-require 'sweet_actions/show_action'
-require 'sweet_actions/destroy_action'
+# rest
+require 'sweet_actions/rest/base'
+require 'sweet_actions/rest/singular'
+require 'sweet_actions/rest/multiple'
+require 'sweet_actions/rest/find'
+require 'sweet_actions/rest/save'
+require 'sweet_actions/rest/read'
+require 'sweet_actions/rest/collect'
+require 'sweet_actions/rest/create'
+require 'sweet_actions/rest/update'
+require 'sweet_actions/rest/show'
+require 'sweet_actions/rest/destroy'
+
+# json
+require 'sweet_actions/json/base_action'
+require 'sweet_actions/json/collect_action'
+require 'sweet_actions/json/create_action'
+require 'sweet_actions/json/update_action'
+require 'sweet_actions/json/show_action'
+require 'sweet_actions/json/destroy_action'
 
 # helpers
 require 'sweet_actions/controller_concerns'
