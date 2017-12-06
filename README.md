@@ -64,8 +64,8 @@ This last command (`rails g actions events`) generates a folder at `app/actions/
 
 ```ruby
 Rails.application.routes.draw do
-  scope :api
-    scope :v1
+  scope :api do
+    scope :v1 do
       create_sweet_actions(:events)
     end
   end
