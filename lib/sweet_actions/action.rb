@@ -17,6 +17,10 @@ module SweetActions
 
     def after_init(options); end
 
+    def before_action
+      # optional hook
+    end
+
     def action
       raise "action method is required for #{self.class.name} because it inherits from SweetActions::Action"
     end

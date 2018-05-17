@@ -7,6 +7,7 @@ module SweetActions
 
       def perform_action
         run_action = Proc.new do
+          before_action
           @response_data = action
         end
 
