@@ -24,7 +24,7 @@ module SweetActions
       parts = [namespace, resource_module, action_class_name].compact
       klass_name = parts.join('::')
       return klass_name.constantize if klass_defined?(klass_name)
-      path = parts.map(&:downcase).join('/')
+      path = parts.map(&:downcase).join('/')      
       raise SweetActions::Exceptions::ActionNotFound, path: path, class_name: klass_name
     end
 
