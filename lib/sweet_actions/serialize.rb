@@ -13,9 +13,11 @@ module SweetActions
     def serialize
       return serialize_destroyed_resource if destroyed?
 
-      {
-        type: root_key,
-        attributes: serialized_attributes
+      { 
+        data: {
+          type: root_key,
+          attributes: serialized_attributes
+        }
       }
     end
 
