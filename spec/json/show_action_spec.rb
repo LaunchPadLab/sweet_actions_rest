@@ -18,7 +18,8 @@ describe SweetActions::JSON::ShowAction do
     end
 
     it 'should return keys of type and attributes' do
-      expect(subject.keys).to eq([:type, :attributes])
+      expect(subject.keys).to eq([:data])
+      expect(subject[:data].keys).to eq([:type, :attributes])
     end
   end
 end
