@@ -1,4 +1,4 @@
-# Sweet Actions
+# Sweet Actions REST
 
 ## Introduction
 Controller actions (`events#create`) tend to have more in common with their cousins (`articles#create`) than their siblings (`events#show`). Because of this, we think actions should be classes instead of methods. This makes it possible for actions to take advantage of common Object Oriented principles like Inheritance and Composition.
@@ -16,9 +16,7 @@ Let's take a look at how that's possible.
 Gemfile:
 
 ```ruby
-gem 'sweet_actions'
-gem 'active_model_serializers'
-gem 'decanter'
+gem 'sweet_actions_rest'
 ```
 
 Terminal:
@@ -26,15 +24,16 @@ Terminal:
 ```
 bundle
 bundle exec rails g sweet_actions:install
+bundle exec rails g sweet_actions_rest:install
 ```
 
 This command generates a folder at `app/actions` with the following structure:
 
 ```
-- base_action.rb
-- collect_action.rb
+- action_concerns.rb
 - create_action.rb
 - destroy_action.rb
+- index_action.rb
 - show_action.rb
 - update_action.rb
 ```
@@ -53,9 +52,9 @@ This last command (`rails g actions events`) generates a folder at `app/actions/
 
 ```
 - events/
-    - collect.rb
     - create.rb
     - destroy.rb
+    - index.rb
     - show.rb
     - update.rb
 ```
@@ -109,11 +108,11 @@ You should get a response like so:
 For a given resource, we provide five RESTful actions:
 
 ```
-Collect: GET '/events'
 Create: POST '/events'
+Destroy: DELETE '/events/:id'
+Index: GET '/events'
 Show: GET '/events/:id'
 Update: PUT '/events/:id'
-Destroy: DELETE '/events/:id'
 ```
 
 Many of these actions have shared behavior, which we abstract for you:
@@ -133,7 +132,7 @@ For actions that are not RESTful (i.e. not one of the five listed above), you ca
 ```ruby
 # app/actions/events/export.rb:
 module Events
-  class Export < SweetActions::JSON::BaseAction
+  class Export < SweetActionsRest::JSON::BaseAction
     def action
       {
         success: true
@@ -232,10 +231,10 @@ end
 Instead, we propose a strategy where the actions themselves are classes. This would allow us have multiple layers of abstraction like so:
 
 1. **Generic Logic** (logic that applies to all apps that use SweetActions):
-- `class SweetActions::JSON::CreateAction`
+- `class SweetActionsRest::JSON::CreateAction`
 
 2. **Application Logic**: logic that applies to all create actions in your app:
-- `class CreateAction < SweetActions::JSON::CreateAction`
+- `class CreateAction < SweetActionsRest::JSON::CreateAction`
 
 3. **Resource Logic**: logic that applies to a specific resource (e.g. Events) in your app
 - `class Events::Create < CreateAction`
@@ -294,7 +293,7 @@ end
 
 ```ruby
 # app logic for create (app/actions/create_action.rb)
-class CreateAction < SweetActions::JSON::CreateAction
+class CreateAction < SweetActionsRest::JSON::CreateAction
   def set_resource
     resource_class.new(resource_params)
   end
@@ -318,3 +317,50 @@ end
 
 As you can see, we can abstract most of the `create` logic to be shared across resources, which means you **only need to write the code that is unique about this create action vs. other create actions**.
 
+
+## The Five CRUD Actions
+
+Below you will find a list of the hooks available for each of the five CRUD actions.
+
+### ShowAction
+
+- find_resource
+- authorize
+- respond
+
+### IndexAction
+
+- query_resource
+- authorize
+- respond
+
+### CreateAction
+
+- build_resource
+- authorize
+- validate_and_save
+  - valid?
+  - save
+- after_save
+- after_fail
+- respond_with_success
+- respond_with_failure
+
+### UpdateAction
+
+- find_resource
+- authorize
+- validate_and_save
+  - valid?
+  - save
+- after_save
+- after_fail
+- respond_with_success
+- respond_with_failure
+
+### DestroyAction
+
+- find_resource
+- authorize
+- destroy
+- respond

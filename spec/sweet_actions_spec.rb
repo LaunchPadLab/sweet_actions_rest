@@ -1,7 +1,7 @@
 require "spec_helper"
 
-RSpec.describe SweetActions do
+RSpec.describe SweetActionsRest do
   it "has a version number" do
-    expect(SweetActions::VERSION).not_to be nil
+    expect(SweetActionsRest::VERSION).not_to be nil
   end
 end

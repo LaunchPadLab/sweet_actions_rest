@@ -148,7 +148,7 @@ Since the actions have more in common with each other than they do with the reso
 ---
 
 ```ruby
-class CreateAction < SweetActions::CreateAction
+class CreateAction < SweetActionsRest::CreateAction
   def action
     resource = set_resource
     resource.save ? success : failure

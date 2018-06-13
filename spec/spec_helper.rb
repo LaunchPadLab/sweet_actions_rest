@@ -1,5 +1,5 @@
 require 'bundler/setup'
-require 'sweet_actions'
+require 'sweet_actions_rest'
 require 'pry'
 require_relative 'support/event'
 require_relative 'support/fake_controller'

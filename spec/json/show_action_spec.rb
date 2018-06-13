@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe SweetActions::JSON::ShowAction do
-  let(:show_action) { SweetActions::JSON::ShowAction.new(FakeController.new) }
+describe SweetActionsRest::JSON::ShowAction do
+  let(:show_action) { SweetActionsRest::JSON::ShowAction.new(FakeController.new) }
 
   let(:path_parameters) { { resource_name: 'Event' } }
 

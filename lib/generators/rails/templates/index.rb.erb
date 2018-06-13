@@ -1,0 +1,7 @@
+module <%= module_name %>
+  class Index < IndexAction
+    def query_resource
+      resource_class.all
+    end
+  end
+end
